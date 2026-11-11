@@ -1,13 +1,27 @@
+import { useState } from "react";
 import FormContainer from "../components/FormContainer";
 import HeaderContainer from "../components/HeaderContainer";
 import ListContainer from "../components/ListContainer";
 
 const StudentPage = () => {
-    const students = [
-        {id: 1, name: "Nina Angela", srcode: "24-23467", program: "BSIT" },
-        {id: 2, name: "Sophia Pola", srcode: "24-21468", program: "BSCS" },
-        {id: 3, name: "Wilmarc Venn", srcode: "24-25469", program: "BSIT" },
-    ];
+    const [students, setStudents] = useState([]);
+
+    const getData =  async() => {
+        const response = await fetch('http://127.0.0.1:3000/student/');
+        if(!response.ok){
+            throw new Error('Unable to fetch data');
+        }
+
+        const data = await response.json();
+        return data;
+    }
+
+    getData().then((result) => {
+        setStudents(result);
+    }).catch((e) => {
+        console.log(e.message);
+    })
+    
     return (
         <>
             <HeaderContainer />
